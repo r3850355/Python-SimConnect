@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
 from SimConnect import *
 import random
 
@@ -18,7 +19,11 @@ import random
 #
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='pwa', static_url_path='/pwa')
+CORS(app)
+
+# GOOGLE MAP API KEY
+googleMapAPIKey = ''
 
 # SIMCONNECTION RELATED STARTUPS
 
@@ -30,10 +35,11 @@ aq = AircraftRequests(sm, _time=10)
 # Create request holders
 # These are groups of datapoints which it is convenient to call as a group because they fulfill a specific function
 request_location = [
-	'ALTITUDE',
-	'LATITUDE',
-	'LONGITUDE',
-	'KOHLSMAN',
+	'PLANE_ALTITUDE',
+	'PLANE_LATITUDE',
+	'PLANE_LONGITUDE',
+	'PLANE_HEADING_DEGREES_TRUE',
+	'GROUND_VELOCITY',
 ]
 
 request_airspeed = [
@@ -250,10 +256,20 @@ def thousandify(x):
 	return f"{x:,}"
 
 
+# @app.route('/')
+# def glass():
+# 	return render_template("glass.html")
 @app.route('/')
-def glass():
-	return render_template("glass.html")
+def pwa():
+	return app.send_static_file('index.html')
 
+@app.route('/<path:path>')
+def statuc_dir(path):
+	return app.send_static_file(path)
+
+@app.route('/key')
+def key():
+	return googleMapAPIKey
 
 @app.route('/attitude-indicator')
 def AttInd():
@@ -440,6 +456,21 @@ def trigger_event_endpoint(event_name):
 
 	return jsonify(status)
 
+@app.route('/event/<event_name>/mobiflight', methods=["POST"])
+def trigger_event_mobiflight(event_name):
+
+	# ds = request.get_json() if request.is_json else request.form
+	# value_to_use = ds.get('value_to_use')
+
+	# status = trigger_event(event_name, value_to_use)
+	cmd = "MobiFlight." + event_name
+	bt = bytes(cmd, encoding = "utf-8")
+	Sk3 = Event(bt, sm)
+	# Sk3 = Event(b'MobiFlight.AS530_RightLargeKnob_Left', sm)
+	# Call the Event.
+	Sk3()
+
+	return '200'
 
 @app.route('/custom_emergency/<emergency_type>', methods=["GET", "POST"])
 def custom_emergency(emergency_type):

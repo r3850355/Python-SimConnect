@@ -582,8 +582,8 @@ class SimConnectDll(object):
 		self.AICreateNonATCAircraft.restype = HRESULT
 		self.AICreateNonATCAircraft.argtypes = [
 			HANDLE,
-			c_char_p,
-			c_char_p,
+			c_double,
+			c_double,
 			SIMCONNECT_DATA_INITPOSITION,
 			self.DATA_REQUEST_ID,
 		]
@@ -691,11 +691,7 @@ class SimConnectDll(object):
 		#   float * fElapsedSeconds);
 		self.RequestResponseTimes = self.SimConnect.SimConnect_RequestResponseTimes
 		self.RequestResponseTimes.restype = HRESULT
-		self.RequestResponseTimes.argtypes = [
-			HANDLE, 
-			DWORD, 
-			c_float
-		]
+		self.RequestResponseTimes.argtypes = [HANDLE, DWORD, c_float]
 
 		# SIMCONNECTAPI SimConnect_InsertString(
 		#   char * pDest,
@@ -717,14 +713,7 @@ class SimConnectDll(object):
 		#   float fHeadingDeg);
 		self.CameraSetRelative6DOF = self.SimConnect.SimConnect_CameraSetRelative6DOF
 		self.CameraSetRelative6DOF.restype = HRESULT
-		self.CameraSetRelative6DOF.argtypes = [
-			c_float,
-			c_float,
-			c_float,
-			c_float,
-			c_float,
-			c_float
-		]
+		self.CameraSetRelative6DOF.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_MenuAddItem(
 		#   HANDLE hSimConnect,
@@ -733,21 +722,14 @@ class SimConnectDll(object):
 		#   DWORD dwData);
 		self.MenuAddItem = self.SimConnect.SimConnect_MenuAddItem
 		self.MenuAddItem.restype = HRESULT
-		self.MenuAddItem.argtypes = [
-			HANDLE,
-			SIMCONNECT_CLIENT_EVENT_ID,
-			DWORD
-		]
+		self.MenuAddItem.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_MenuDeleteItem(
 		#   HANDLE hSimConnect,
 		#   SIMCONNECT_CLIENT_EVENT_ID MenuEventID);
 		self.MenuDeleteItem = self.SimConnect.SimConnect_MenuDeleteItem
 		self.MenuDeleteItem.restype = HRESULT
-		self.MenuDeleteItem.argtypes = [
-			HANDLE,
-			SIMCONNECT_CLIENT_EVENT_ID
-		]
+		self.MenuDeleteItem.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_MenuAddSubItem(
 		#   HANDLE hSimConnect,
@@ -757,13 +739,7 @@ class SimConnectDll(object):
 		#   DWORD dwData);
 		self.MenuAddSubItem = self.SimConnect.SimConnect_MenuAddSubItem
 		self.MenuAddSubItem.restype = HRESULT
-		self.MenuAddSubItem.argtypes = [
-			HANDLE,
-			SIMCONNECT_CLIENT_EVENT_ID,
-			c_char_p,
-			SIMCONNECT_CLIENT_EVENT_ID,
-			DWORD
-		]
+		self.MenuAddSubItem.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_MenuDeleteSubItem(
 		#   HANDLE hSimConnect,
@@ -771,11 +747,7 @@ class SimConnectDll(object):
 		#   const SIMCONNECT_CLIENT_EVENT_ID SubMenuEventID);
 		self.MenuDeleteSubItem = self.SimConnect.SimConnect_MenuDeleteSubItem
 		self.MenuDeleteSubItem.restype = HRESULT
-		self.MenuDeleteSubItem.argtypes = [
-			HANDLE,
-			SIMCONNECT_CLIENT_EVENT_ID,
-			SIMCONNECT_CLIENT_EVENT_ID
-		]
+		self.MenuDeleteSubItem.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_RequestSystemState(
 		#   HANDLE hSimConnect,
@@ -783,11 +755,7 @@ class SimConnectDll(object):
 		#   const char * szState);
 		self.RequestSystemState = self.SimConnect.SimConnect_RequestSystemState
 		self.RequestSystemState.restype = HRESULT
-		self.RequestSystemState.argtypes = [
-			HANDLE,
-			SIMCONNECT_DATA_REQUEST_ID,
-			c_char_p
-		]
+		self.RequestSystemState.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_SetSystemState(
 		#   HANDLE hSimConnect,
@@ -797,13 +765,7 @@ class SimConnectDll(object):
 		#   const char * szString);
 		self.SetSystemState = self.SimConnect.SimConnect_SetSystemState
 		self.SetSystemState.restype = HRESULT
-		self.SetSystemState.argtypes = [
-			HANDLE,
-			c_char_p,
-			DWORD,
-			c_float,
-			c_char_p
-		]
+		self.SetSystemState.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_MapClientDataNameToID(
 		#   HANDLE hSimConnect,
@@ -811,11 +773,7 @@ class SimConnectDll(object):
 		#   SIMCONNECT_CLIENT_DATA_ID ClientDataID);
 		self.MapClientDataNameToID = self.SimConnect.SimConnect_MapClientDataNameToID
 		self.MapClientDataNameToID.restype = HRESULT
-		self.MapClientDataNameToID.argtypes = [
-			HANDLE, 
-			c_char_p, 
-			SIMCONNECT_CLIENT_DATA_ID
-		]
+		self.MapClientDataNameToID.argtypes = []
 
 		# SIMCONNECTAPI SimConnect_CreateClientData(
 		#   HANDLE hSimConnect,
@@ -838,7 +796,9 @@ class SimConnectDll(object):
 		#   DWORD dwSizeOrType
 		#   float fEpsilon = 0
 		#   DWORD DatumID = SIMCONNECT_UNUSED);
-		self.AddToClientDataDefinition = self.SimConnect.SimConnect_AddToClientDataDefinition
+		self.AddToClientDataDefinition = (
+			self.SimConnect.SimConnect_AddToClientDataDefinition
+		)
 		self.AddToClientDataDefinition.restype = HRESULT
 		self.AddToClientDataDefinition.argtypes = [
 			HANDLE,
@@ -852,7 +812,9 @@ class SimConnectDll(object):
 		# SIMCONNECTAPI SimConnect_ClearClientDataDefinition(
 		#   HANDLE hSimConnect,
 		#   SIMCONNECT_CLIENT_DATA_DEFINITION_ID DefineID);
-		self.ClearClientDataDefinition = self.SimConnect.SimConnect_ClearClientDataDefinition
+		self.ClearClientDataDefinition = (
+			self.SimConnect.SimConnect_ClearClientDataDefinition
+		)
 		self.ClearClientDataDefinition.restype = HRESULT
 		self.ClearClientDataDefinition.argtypes = [
 			HANDLE,
